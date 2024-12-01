@@ -1,0 +1,6 @@
+@handball_IS_HostAddress = http://localhost:5129
+
+GET {{handball_IS_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
