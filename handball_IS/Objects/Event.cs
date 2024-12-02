@@ -7,5 +7,8 @@
         public Team Team { get; set; }
         public string Time { get; set; }
         public int AuthorId { get; set; }
+
+        // Foreign keys
+        public int MatchId { get; set; }
     }
 }

@@ -10,8 +10,10 @@
         public List<Vote> Voting { get; set; }
         public List<PlayerStats> Stats { get; set; }
 
+        // Foreign keys
         public int TournamentInstanceId { get; set; }
 
-        public TournamentInstance TournamentInstance { get; set; }
+
+
     }
 }
