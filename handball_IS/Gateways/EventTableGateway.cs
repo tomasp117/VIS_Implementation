@@ -1,0 +1,51 @@
+﻿using Dapper;
+using handball_IS.Objects;
+using handball_IS.Utils;
+
+namespace handball_IS.Gateways
+{
+    public class EventTableGateway
+    {
+        private readonly DatabaseConnectionFactory databaseConnectionFactory;
+
+        public EventTableGateway(DatabaseConnectionFactory databaseConnectionFactory)
+        {
+            this.databaseConnectionFactory = databaseConnectionFactory;
+        }
+
+        public async Task<IEnumerable<Event>> GetEvents()
+        {
+            using var connection = databaseConnectionFactory.CreateConnection();
+            string sql = "SELECT * FROM Events";
+            return await connection.QueryAsync<Event>(sql);
+        }
+
+        public async Task<Event> GetEventById(int id)
+        {
+            using var connection = databaseConnectionFactory.CreateConnection();
+            string sql = "SELECT * FROM Events WHERE Id = @Id";
+            return await connection.QueryFirstOrDefaultAsync<Event>(sql, new { Id = id });
+        }
+
+        public async Task InsertEvent(Event @event)
+        {
+            using var connection = databaseConnectionFactory.CreateConnection();
+            string sql = "INSERT INTO Events (Name) VALUES (@Name)";
+            await connection.ExecuteAsync(sql, @event);
+        }
+
+        public async Task UpdateEvent(Event @event)
+        {
+            using var connection = databaseConnectionFactory.CreateConnection();
+            string sql = "UPDATE Events SET Name = @Name WHERE Id = @Id";
+            await connection.ExecuteAsync(sql, @event);
+        }
+
+        public async Task DeleteEvent(int id)
+        {
+            using var connection = databaseConnectionFactory.CreateConnection();
+            string sql = "DELETE FROM Events WHERE Id = @Id";
+            await connection.ExecuteAsync(sql, new { Id = id });
+        }
+    }
+}

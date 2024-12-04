@@ -13,6 +13,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version(8, 0, 32))));
 
+builder.Services.AddSingleton<DatabaseConnectionFactory>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
