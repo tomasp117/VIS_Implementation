@@ -12,7 +12,7 @@ using handball_IS.Utils;
 namespace handball_IS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241204093953_InitialCreate")]
+    [Migration("20241204171039_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -45,8 +45,13 @@ namespace handball_IS.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("Username")
-                        .HasColumnType("int");
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<int>("phoneNumber")
                         .HasColumnType("int");
@@ -363,9 +368,19 @@ namespace handball_IS.Migrations
                     b.Property<int>("TeamId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("goalkeeperVoteId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("playerVoteId")
+                        .HasColumnType("int");
+
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("TeamId");
+
+                    b.HasIndex("goalkeeperVoteId");
+
+                    b.HasIndex("playerVoteId");
 
                     b.ToTable("Coach", (string)null);
                 });
@@ -540,9 +555,21 @@ namespace handball_IS.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("handball_IS.Objects.Player", "goalkeeperVote")
+                        .WithMany()
+                        .HasForeignKey("goalkeeperVoteId");
+
+                    b.HasOne("handball_IS.Objects.Player", "playerVote")
+                        .WithMany()
+                        .HasForeignKey("playerVoteId");
+
                     b.Navigation("Category");
 
                     b.Navigation("Team");
+
+                    b.Navigation("goalkeeperVote");
+
+                    b.Navigation("playerVote");
                 });
 
             modelBuilder.Entity("handball_IS.Objects.Actors.sub.Recorder", b =>

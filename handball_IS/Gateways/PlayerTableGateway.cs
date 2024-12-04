@@ -30,14 +30,14 @@ namespace handball_IS.Gateways
         public async Task InsertPlayer(Player player)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "INSERT INTO Players (FirstName, LastName, DateOfBirth, Height, Weight, Position, ClubId) VALUES (@FirstName, @LastName, @DateOfBirth, @Height, @Weight, @Position, @ClubId)";
+            string sql = "INSERT INTO Players (Number, FirstName, LastName, GoalCount, SevenMeterGoalCount, SevenMeterMissCount, TwoMinPenaltyCount, RedCardCount, YellowCardCount, TeamId, CategoryId) VALUES (@Number, @FirstName, @LastName, @GoalCount, @SevenMeterGoalCount, @SevenMeterMissCount, @TwoMinPenaltyCount, @RedCardCount, @YellowCardCount, @TeamId, @CategoryId)";
             await connection.ExecuteAsync(sql, player);
         }
 
         public async Task UpdatePlayer(Player player)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "UPDATE Players SET FirstName = @FirstName, LastName = @LastName, DateOfBirth = @DateOfBirth, Height = @Height, Weight = @Weight, Position = @Position, ClubId = @ClubId WHERE Id = @Id";
+            string sql = "UPDATE Players SET Number = @Number, FirstName = @FirstName, LastName = @LastName, GoalCount = @GoalCount, SevenMeterGoalCount = @SevenMeterGoalCount, SevenMeterMissCount = @SevenMeterMissCount, TwoMinPenaltyCount = @TwoMinPenaltyCount, RedCardCount = @RedCardCount, YellowCardCount = @YellowCardCount, TeamId = @TeamId, CategoryId = @CategoryId WHERE Id = @Id";
             await connection.ExecuteAsync(sql, player);
         }
 

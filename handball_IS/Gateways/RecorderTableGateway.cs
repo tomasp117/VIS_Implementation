@@ -30,14 +30,14 @@ namespace handball_IS.Gateways
         public async Task InsertRecorder(Recorder recorder)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "INSERT INTO Recorders (Name) VALUES (@Name)";
+            string sql = "INSERT INTO Recorders (FirsName, LastName, Emial, PhoneNumber, Username, Password) VALUES (@FirstName, @LastName, @Email, @PhoneNumber, @Username, @Password)";
             await connection.ExecuteAsync(sql, recorder);
         }
 
         public async Task UpdateRecorder(Recorder recorder)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "UPDATE Recorders SET Name = @Name WHERE Id = @Id";
+            string sql = "UPDATE Recorders SET FirstName = @FirstName, LastName = @LastName, Email = @Email, PhoneNumber = @PhoneNumber, Username = @Username, Password = @Password WHERE Id = @Id";
             await connection.ExecuteAsync(sql, recorder);
         }
 

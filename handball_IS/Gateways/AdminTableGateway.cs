@@ -31,14 +31,14 @@ namespace handball_IS.Gateways
         public async Task InsertAdmin(Admin admin)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "INSERT INTO Admins (Name, Email, Password) VALUES (@Name, @Email, @Password)";
+            string sql = "INSERT INTO Admins (FirstName, LastName, Email, PhoneNumber, Username, Password) VALUES (@FirstName, @LastName, @Email, @PhoneNumber, @Username, @Password)";
             await connection.ExecuteAsync(sql, admin);
         }
 
         public async Task UpdateAdmin(Admin admin)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "UPDATE Admins SET Name = @Name, Email = @Email, Password = @Password WHERE Id = @Id";
+            string sql = "UPDATE Admins SET FirstName = @FirstName, LastName = @LastName, Email = @Email, PhoneNumber = @PhoneNumber, Username = @Username, Password = @Password WHERE Id = @Id";
             await connection.ExecuteAsync(sql, admin);
         }
 

@@ -47,7 +47,10 @@ namespace handball_IS.Migrations
                     Email = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     phoneNumber = table.Column<int>(type: "int", nullable: false),
-                    Username = table.Column<int>(type: "int", nullable: false)
+                    Username = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Password = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -224,40 +227,6 @@ namespace handball_IS.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Coach",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    License = table.Column<string>(type: "varchar(1)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    TeamId = table.Column<int>(type: "int", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Coach", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Coach_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Coach_Person_Id",
-                        column: x => x.Id,
-                        principalTable: "Person",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Coach_Teams_TeamId",
-                        column: x => x.TeamId,
-                        principalTable: "Teams",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Players",
                 columns: table => new
                 {
@@ -352,6 +321,52 @@ namespace handball_IS.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Coach",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    playerVoteId = table.Column<int>(type: "int", nullable: true),
+                    goalkeeperVoteId = table.Column<int>(type: "int", nullable: true),
+                    License = table.Column<string>(type: "varchar(1)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TeamId = table.Column<int>(type: "int", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Coach", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Coach_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Coach_Person_Id",
+                        column: x => x.Id,
+                        principalTable: "Person",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Coach_Players_goalkeeperVoteId",
+                        column: x => x.goalkeeperVoteId,
+                        principalTable: "Players",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Coach_Players_playerVoteId",
+                        column: x => x.playerVoteId,
+                        principalTable: "Players",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Coach_Teams_TeamId",
+                        column: x => x.TeamId,
+                        principalTable: "Teams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Events",
                 columns: table => new
                 {
@@ -387,6 +402,16 @@ namespace handball_IS.Migrations
                 name: "IX_Coach_CategoryId",
                 table: "Coach",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Coach_goalkeeperVoteId",
+                table: "Coach",
+                column: "goalkeeperVoteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Coach_playerVoteId",
+                table: "Coach",
+                column: "playerVoteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Coach_TeamId",
@@ -467,10 +492,10 @@ namespace handball_IS.Migrations
                 name: "Events");
 
             migrationBuilder.DropTable(
-                name: "Players");
+                name: "Recorder");
 
             migrationBuilder.DropTable(
-                name: "Recorder");
+                name: "Players");
 
             migrationBuilder.DropTable(
                 name: "Matches");

@@ -33,7 +33,7 @@ namespace handball_IS.Gateways
         public async Task InsertTeam(Team team)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "INSERT INTO Teams (Name) VALUES (@Name)";
+            string sql = "INSERT INTO Teams (Name, ClubId, TournamentInstanceId) VALUES (@Name, @ClubId, @TournamentInstanceId)";
             await connection.ExecuteAsync(sql, team);
         }
 

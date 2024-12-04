@@ -30,14 +30,14 @@ namespace handball_IS.Gateways
         public async Task InsertReferee(Referee referee)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "INSERT INTO Referees (Name) VALUES (@Name)";
+            string sql = "INSERT INTO Referees (FirstName, LastName, Email, PhoneNumber, Username, Password, License) VALUES (@FirstName, @LastName, @Email, @PhoneNumber, @Username, @Password, @License)";
             await connection.ExecuteAsync(sql, referee);
         }
 
         public async Task UpdateReferee(Referee referee)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "UPDATE Referees SET Name = @Name WHERE Id = @Id";
+            string sql = "UPDATE Referees SET Name = @Name , Email = @Email, PhoneNumber = @PhoneNumber, Username = @Username, Password = @Password WHERE Id = @Id";
             await connection.ExecuteAsync(sql, referee);
         }
 

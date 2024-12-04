@@ -30,14 +30,14 @@ namespace handball_IS.Gateways
         public async Task InsertClub(Club club)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "INSERT INTO Clubs (Name) VALUES (@Name)";
+            string sql = "INSERT INTO Clubs (Name, Logo, Email) VALUES (@Name, @Logo, @Email)";
             await connection.ExecuteAsync(sql, club);
         }
 
         public async Task UpdateClub(Club club)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "UPDATE Clubs SET Name = @Name WHERE Id = @Id";
+            string sql = "UPDATE Clubs SET Name = @Name, Logo = @Logo, Email = @Email WHERE Id = @Id";
             await connection.ExecuteAsync(sql, club);
         }
 

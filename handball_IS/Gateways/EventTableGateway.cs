@@ -30,14 +30,14 @@ namespace handball_IS.Gateways
         public async Task InsertEvent(Event @event)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "INSERT INTO Events (Name) VALUES (@Name)";
+            string sql = "INSERT INTO Events (Type, Team, Time, AuthorId, MatchId) VALUES (@Type, @Team, @Time, @AuthorId, @MatchId)";
             await connection.ExecuteAsync(sql, @event);
         }
 
         public async Task UpdateEvent(Event @event)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "UPDATE Events SET Name = @Name WHERE Id = @Id";
+            string sql = "UPDATE Events SET Type = @Type, Team = @Team, Time = @Time, AuthorId = @AuthorId, MatchId = @MatchId WHERE Id = @Id";
             await connection.ExecuteAsync(sql, @event);
         }
 

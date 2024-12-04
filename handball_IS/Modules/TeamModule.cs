@@ -49,4 +49,5 @@ namespace handball_IS.Modules
             }
             return team.Players;
         }
+    }
 }

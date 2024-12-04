@@ -131,8 +131,6 @@ namespace handball_IS.Utils
             modelBuilder.Entity<Group>().Ignore(g => g.Teams);
             modelBuilder.Entity<Match>().Ignore(m => m.Category);
             modelBuilder.Entity<Category>().Ignore(c => c.Matches);
-            modelBuilder.Entity<Coach>().Ignore(c => c.playerVote);
-            modelBuilder.Entity<Coach>().Ignore(c => c.goalkeeperVote);
 
 
 
