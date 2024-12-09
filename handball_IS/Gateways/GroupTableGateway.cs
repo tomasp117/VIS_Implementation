@@ -1,6 +1,7 @@
 ﻿using Dapper;
+using handball_IS.Objects;
 using handball_IS.Utils;
-using System.Text.RegularExpressions;
+
 
 namespace handball_IS.Gateways
 {
@@ -13,18 +14,25 @@ namespace handball_IS.Gateways
             this.databaseConnectionFactory = databaseConnectionFactory;
         }
 
-        public async Task<IEnumerable<Group>> GetGroups()
+        public async Task<List<Group>> GetGroups()
         {
             using var connection = databaseConnectionFactory.CreateConnection();
             string sql = "SELECT * FROM Groups";
-            return await connection.QueryAsync<Group>(sql);
+            return (await connection.QueryAsync<Group>(sql)).ToList();
         }
 
         public async Task<Group> GetGroupById(int id)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "SELECT * FROM Groups WHERE Id = @Id";
+            string sql = "SELECT * FROM `Groups` WHERE Id = @Id";
             return await connection.QueryFirstOrDefaultAsync<Group>(sql, new { Id = id });
+        }
+
+        public async Task<List<Group>> GetGroupsByCategory(int categoryId)
+        {
+            using var connection = databaseConnectionFactory.CreateConnection();
+            string sql = "SELECT * FROM `Groups` WHERE CategoryId = @CategoryId";
+            return (await connection.QueryAsync<Group>(sql, new { CategoryId = categoryId })).ToList();
         }
 
         public async Task InsertGroup(Group group)

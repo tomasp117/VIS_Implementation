@@ -13,11 +13,11 @@ namespace handball_IS.Gateways
             this.databaseConnectionFactory = databaseConnectionFactory;
         }
 
-        public async Task<IEnumerable<Category>> GetCategories()
+        public async Task<List<Category>> GetCategories()
         {
             using var connection = databaseConnectionFactory.CreateConnection();
             string sql = "SELECT * FROM Categories";
-            return await connection.QueryAsync<Category>(sql);
+            return (await connection.QueryAsync<Category>(sql)).ToList();
         }
 
         public async Task<Category> GetCategoryById(int id)
@@ -25,6 +25,13 @@ namespace handball_IS.Gateways
             using var connection = databaseConnectionFactory.CreateConnection();
             string sql = "SELECT * FROM Categories WHERE Id = @Id";
             return await connection.QueryFirstOrDefaultAsync<Category>(sql, new { Id = id });
+        }
+
+        public async Task<Category> GetCategoryByName(string categoryName)
+        {
+            using var connection = databaseConnectionFactory.CreateConnection();
+            string sql = "SELECT * FROM Categories WHERE Name = @CategoryName";
+            return await connection.QueryFirstOrDefaultAsync<Category>(sql, new { CategoryName = categoryName });
         }
 
         public async Task InsertCategory(Category category)

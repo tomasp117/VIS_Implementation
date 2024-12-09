@@ -13,38 +13,37 @@ namespace handball_IS.Gateways
             this.databaseConnectionFactory = databaseConnectionFactory;
         }
 
-        public async Task<IEnumerable<Coach>> GetCoaches()
+        public async Task<List<Coach>> GetCoaches()
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "SELECT * FROM Coaches";
-            return await connection.QueryAsync<Coach>(sql);
+            string sql = "SELECT * FROM Coach";
+            return (await connection.QueryAsync<Coach>(sql)).ToList();
         }
 
         public async Task<Coach> GetCoachById(int id)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "SELECT * FROM Coaches WHERE Id = @Id";
+            string sql = "SELECT * FROM Coach WHERE Id = @Id";
             return await connection.QueryFirstOrDefaultAsync<Coach>(sql, new { Id = id });
         }
 
         public async Task InsertCoach(Coach coach)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "INSERT INTO Coaches (FirsName, LastName, Emial, PhoneNumber, Username, Password, License, PlayerVotedId, GoalkeeperVotedId, TeamId, CategoryId) VALUES (@FirstName, @LastName, @Email, @PhoneNumber, @Username, @Password, @License, @PlayerVotedId, @GoalkeeperVotedId, @TeamId, @CategoryId)";
+            string sql = "INSERT INTO Coach (Id, PlayerVoteId, GoalkeeperVoteId, License, TeamId, CategoryId) VALUES (@Id, @PlayerVoteId, @GoalkeeperVoteId, @License, @TeamId, @CategoryId)";
             await connection.ExecuteAsync(sql, coach);
         }
 
         public async Task UpdateCoach(Coach coach)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "UPDATE Coaches SET FirstName = @FirstName, LastName = @LastName, Email = @Email, PhoneNumber = @PhoneNumber, Username = @Username, Password = @Password, License = @License, PlayerVotedId = @PlayerVotedId, GoalkeeperVotedId = @GoalkeeperVotedId, TeamId = @TeamId, CategoryId = @CategoryId WHERE Id = @Id";
-            await connection.ExecuteAsync(sql, coach);
+            string sql = "UPDATE Coach SET Id = @Id, PlayerVoteId = @PlayerVoteId, GoalkeeperVoteId = @GoalkeeperVoteId, License = @License, TeamId = @TeamId, CategoryId = @CategoryId WHERE Id = @Id";
         }
 
         public async Task DeleteCoach(int id)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "DELETE FROM Coaches WHERE Id = @Id";
+            string sql = "DELETE FROM Coach WHERE Id = @Id";
             await connection.ExecuteAsync(sql, new { Id = id });
         }
     }

@@ -1,6 +1,5 @@
 ﻿using handball_IS.Objects;
 using handball_IS.Utils;
-using Microsoft.AspNetCore.Connections;
 using Dapper;
 
 
@@ -15,11 +14,11 @@ namespace handball_IS.Gateways
             this.databaseConnectionFactory = databaseConnectionFactory;
         }
 
-        public async Task<IEnumerable<Team>> GetTeams()
+        public async Task<List<Team>> GetTeams()
         {
             using var connection = databaseConnectionFactory.CreateConnection();
             string sql = "SELECT * FROM Teams";
-            return await connection.QueryAsync<Team>(sql);
+            return (await connection.QueryAsync<Team>(sql)).ToList();
             
         }
 
@@ -28,6 +27,27 @@ namespace handball_IS.Gateways
             using var connection = databaseConnectionFactory.CreateConnection();
             string sql = "SELECT * FROM Teams WHERE Id = @Id";
             return await connection.QueryFirstOrDefaultAsync<Team>(sql, new { Id = id });
+        }
+
+        public async Task<List<Team>> GetTeamsByCategoryId(int categoryId)
+        {
+            using var connection = databaseConnectionFactory.CreateConnection();
+            string sql = "SELECT * FROM Teams WHERE CategoryId = @CategoryId";
+            return (await connection.QueryAsync<Team>(sql, new { CategoryId = categoryId })).ToList();
+        }
+
+        public async Task<IEnumerable<Team>> GetTeamsByGroup(int groupId)
+        {
+            using var connection = databaseConnectionFactory.CreateConnection();
+            string sql = "SELECT * FROM Teams WHERE GroupId = @GroupId";
+            return await connection.QueryAsync<Team>(sql, new { GroupId = groupId });
+        }
+
+        public async Task<Team> GetTeamByCoach(int coachId)
+        {
+            using var connection = databaseConnectionFactory.CreateConnection();
+            string sql = "SELECT t.* FROM Teams t JOIN Coach c ON t.Id = c.TeamId WHERE c.Id = @CoachId";
+            return await connection.QueryFirstOrDefaultAsync<Team>(sql, new { CoachId = coachId });
         }
 
         public async Task InsertTeam(Team team)

@@ -13,11 +13,11 @@ namespace handball_IS.Gateways
             this.databaseConnectionFactory = databaseConnectionFactory;
         }
 
-        public async Task<IEnumerable<Club>> GetClubs()
+        public async Task<List<Club>> GetClubs()
         {
             using var connection = databaseConnectionFactory.CreateConnection();
             string sql = "SELECT * FROM Clubs";
-            return await connection.QueryAsync<Club>(sql);
+            return (await connection.QueryAsync<Club>(sql)).ToList();
         }
 
         public async Task<Club> GetClubById(int id)

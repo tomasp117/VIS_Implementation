@@ -49,5 +49,26 @@ namespace handball_IS.Modules
             }
             return team.Players;
         }
+
+        
+        public async Task<List<Team>> GetTeamsByCategory(int categoryId)
+        {
+            List<Team> teams = await teamTableGateway.GetTeamsByCategoryId(categoryId);
+            if (teams.Count == 0)
+            {
+                throw new Exception("No teams found.");
+            }
+            return teams;
+        }
+
+        public async Task<Team> GetTeamByCoach(int coachId)
+        {
+            Team team = await teamTableGateway.GetTeamByCoach(coachId);
+            if (team == null)
+            {
+                throw new Exception("No team found for this coach.");
+            }
+            return team;
+        }
     }
 }

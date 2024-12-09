@@ -14,11 +14,11 @@ namespace handball_IS.Gateways
             this.databaseConnectionFactory = databaseConnectionFactory;
         }
 
-        public async Task<IEnumerable<Admin>> GetAdmins()
+        public async Task<List<Admin>> GetAdmins()
         {
             using var connection = databaseConnectionFactory.CreateConnection();
             string sql = "SELECT * FROM Admins";
-            return await connection.QueryAsync<Admin>(sql);
+            return (await connection.QueryAsync<Admin>(sql)).ToList();
         }
 
         public async Task<Admin> GetAdminById(int id)
@@ -31,14 +31,14 @@ namespace handball_IS.Gateways
         public async Task InsertAdmin(Admin admin)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "INSERT INTO Admins (FirstName, LastName, Email, PhoneNumber, Username, Password) VALUES (@FirstName, @LastName, @Email, @PhoneNumber, @Username, @Password)";
+            string sql = "INSERT INTO Admins (Id) VALUES (@Id)";
             await connection.ExecuteAsync(sql, admin);
         }
 
         public async Task UpdateAdmin(Admin admin)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "UPDATE Admins SET FirstName = @FirstName, LastName = @LastName, Email = @Email, PhoneNumber = @PhoneNumber, Username = @Username, Password = @Password WHERE Id = @Id";
+            string sql = "UPDATE Admins SET Id = @Id WHERE Id = @Id";
             await connection.ExecuteAsync(sql, admin);
         }
 

@@ -13,11 +13,11 @@ namespace handball_IS.Gateways
             this.databaseConnectionFactory = databaseConnectionFactory;
         }
 
-        public async Task<IEnumerable<Referee>> GetReferees()
+        public async Task<List<Referee>> GetReferees()
         {
             using var connection = databaseConnectionFactory.CreateConnection();
             string sql = "SELECT * FROM Referees";
-            return await connection.QueryAsync<Referee>(sql);
+            return (await connection.QueryAsync<Referee>(sql)).ToList();
         }
 
         public async Task<Referee> GetRefereeById(int id)
@@ -30,14 +30,14 @@ namespace handball_IS.Gateways
         public async Task InsertReferee(Referee referee)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "INSERT INTO Referees (FirstName, LastName, Email, PhoneNumber, Username, Password, License) VALUES (@FirstName, @LastName, @Email, @PhoneNumber, @Username, @Password, @License)";
+            string sql = "INSERT INTO Referees (Id, License) VALUES (@Id, @License)";
             await connection.ExecuteAsync(sql, referee);
         }
 
         public async Task UpdateReferee(Referee referee)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "UPDATE Referees SET Name = @Name , Email = @Email, PhoneNumber = @PhoneNumber, Username = @Username, Password = @Password WHERE Id = @Id";
+            string sql = "UPDATE Referees SET Id = @Id, License = @License WHERE Id = @Id";
             await connection.ExecuteAsync(sql, referee);
         }
 
