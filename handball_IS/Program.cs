@@ -42,6 +42,9 @@ builder.Services.AddScoped<GroupModule>();
 builder.Services.AddScoped<GroupTableGateway>();
 builder.Services.AddScoped<TeamModule>();
 builder.Services.AddScoped<TeamTableGateway>();
+builder.Services.AddScoped<PlayerModule>();
+builder.Services.AddScoped<PlayerTableGateway>();
+
 
 
 builder.Services.AddAuthentication(options =>

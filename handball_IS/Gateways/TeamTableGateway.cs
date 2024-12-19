@@ -43,6 +43,14 @@ namespace handball_IS.Gateways
             return await connection.QueryAsync<Team>(sql, new { GroupId = groupId });
         }
 
+        public async Task<int?> GetCategoryIdByTeamId(int teamId)
+        {
+            using var connection = databaseConnectionFactory.CreateConnection();
+            string sql = "SELECT CategoryId FROM Teams WHERE Id = @TeamId";
+            return await connection.QueryFirstOrDefaultAsync<int?>(sql, new { TeamId = teamId });
+        }
+
+
         public async Task<Team> GetTeamByCoach(int coachId)
         {
             using var connection = databaseConnectionFactory.CreateConnection();

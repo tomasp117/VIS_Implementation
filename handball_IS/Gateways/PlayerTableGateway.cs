@@ -27,12 +27,35 @@ namespace handball_IS.Gateways
             return await connection.QueryFirstOrDefaultAsync<Player>(sql, new { Id = id });
         }
 
-        public async Task InsertPlayer(Player player)
+        public async Task<List<Player>> GetPlayersByTeamId(int teamId)
         {
             using var connection = databaseConnectionFactory.CreateConnection();
-            string sql = "INSERT INTO Players (Number, FirstName, LastName, GoalCount, SevenMeterGoalCount, SevenMeterMissCount, TwoMinPenaltyCount, RedCardCount, YellowCardCount, TeamId, CategoryId) VALUES (@Number, @FirstName, @LastName, @GoalCount, @SevenMeterGoalCount, @SevenMeterMissCount, @TwoMinPenaltyCount, @RedCardCount, @YellowCardCount, @TeamId, @CategoryId)";
+            string sql = "SELECT * FROM Players WHERE TeamId = @TeamId";
+            return (await connection.QueryAsync<Player>(sql, new { TeamId = teamId })).ToList();
+        }
+
+        public async Task InsertPlayer(Player player)
+        {
+            // Nastavení výchozích hodnot pro statistiky
+            player.GoalCount = 0;
+            player.SevenMeterGoalCount = 0;
+            player.SevenMeterMissCount = 0;
+            player.TwoMinPenaltyCount = 0;
+            player.RedCardCount = 0;
+            player.YellowCardCount = 0;
+
+            using var connection = databaseConnectionFactory.CreateConnection();
+            string sql = @"
+        INSERT INTO Players (
+            Number, FirstName, LastName, GoalCount, SevenMeterGoalCount,
+            SevenMeterMissCount, TwoMinPenaltyCount, RedCardCount, YellowCardCount, TeamId, CategoryId
+        ) VALUES (
+            @Number, @FirstName, @LastName, @GoalCount, @SevenMeterGoalCount,
+            @SevenMeterMissCount, @TwoMinPenaltyCount, @RedCardCount, @YellowCardCount, @TeamId, @CategoryId
+        )";
             await connection.ExecuteAsync(sql, player);
         }
+
 
         public async Task UpdatePlayer(Player player)
         {

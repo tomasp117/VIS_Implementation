@@ -18,6 +18,9 @@ namespace handball_IS.Objects
         public int ClubId { get; set; }
         public Club Club { get; set; } = null!;
 
+        public int CategoryId { get; set; }
+        public Category Category { get; set; } = null!;
+
         public int TournamentInstanceId { get; set; }
         public TournamentInstance TournamentInstance { get; set; } = null!;
 

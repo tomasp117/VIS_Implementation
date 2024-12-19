@@ -6,23 +6,44 @@ namespace handball_IS.Modules
     public class TeamModule
     {
         private readonly TeamTableGateway teamTableGateway;
+        private readonly PlayerTableGateway playerTableGateway;
 
-        public TeamModule(TeamTableGateway teamTableGateway)
+
+        public TeamModule(TeamTableGateway teamTableGateway, PlayerTableGateway playerTableGateway)
         {
             this.teamTableGateway = teamTableGateway;
+            this.playerTableGateway = playerTableGateway;
         }
 
         public async Task AddPlayerToTeam(int teamId, Player player)
         {
-            Team team = await teamTableGateway.GetTeamById(teamId);
-            if (team == null)
+            Console.WriteLine($"[DEBUG] Adding player to team with ID: {teamId}");
+            Console.WriteLine($"[DEBUG] Player data received: {player.FirstName} {player.LastName}, Number: {player.Number}");
+
+            // Získání CategoryId
+            var categoryId = await teamTableGateway.GetCategoryIdByTeamId(teamId);
+            if (categoryId == null)
             {
-                throw new Exception("Team not found");
+                Console.WriteLine($"[ERROR] No category found for team ID: {teamId}");
+                throw new Exception("Category not found for the specified team.");
             }
 
-            team.Players.Add(player);
-            await teamTableGateway.UpdateTeam(team);
+            Console.WriteLine($"[DEBUG] Resolved category ID: {categoryId}");
+            player.CategoryId = categoryId.Value;
+
+            // Vložení hráče
+            await playerTableGateway.InsertPlayer(player);
+            Console.WriteLine("[DEBUG] Player successfully inserted.");
         }
+
+
+        public async Task<int?> GetCategoryIdByTeamId(int teamId)
+        {
+            var team = await teamTableGateway.GetTeamById(teamId);
+            return team?.CategoryId;
+        }
+
+
 
         public async Task RemovePlayerFromTeam(int teamId, int playerId)
         {
@@ -42,12 +63,8 @@ namespace handball_IS.Modules
 
         public async Task<List<Player>> GetAllPlayersInTeam(int teamId)
         {
-            Team team = await teamTableGateway.GetTeamById(teamId);
-            if (team == null)
-            {
-                throw new Exception("Team not found");
-            }
-            return team.Players;
+            var players = await playerTableGateway.GetPlayersByTeamId(teamId);
+            return players?.ToList() ?? new List<Player>();
         }
 
         
@@ -58,6 +75,7 @@ namespace handball_IS.Modules
             {
                 throw new Exception("No teams found.");
             }
+            Console.WriteLine(teams);
             return teams;
         }
 
